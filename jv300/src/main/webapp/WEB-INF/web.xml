@@ -7,6 +7,9 @@
 	<listener>
 		<listener-class>com.varxyz.jv300.mod009.InitializeCourseListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.varxyz.jv300.mod009.InitializeDataSource</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>HelloServlet</servlet-name>
 		<servlet-class>com.varxyz.jv300.mod002.HelloServlet</servlet-class>

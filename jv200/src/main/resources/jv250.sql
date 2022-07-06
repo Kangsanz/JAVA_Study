@@ -72,11 +72,17 @@ SELECT * FROM Account a INNER JOIN Customer c ON a.customerId = c.cid WHERE c.ss
 
 SELECT aid, accountNum, accountType, balance FROM Account a INNER JOIN Customer c ON c.ssn = '840104-1234567';
 
+CREATE TABLE User (
+	userId		VARCHAR(16)		NOT NULL,
+	passwd		VARCHAR(16)		NOT NULL,
+	userName	VARCHAR(20)		NOT NULL,
+	ssn			VARCHAR(14)		NOT NULL,
+	email		VARCHAR(40)		NOT NULL,
+	addr		VARCHAR(30)		NOT NULL,
+	regDate		TIMESTAMP		NOT NULL	DEFAULT CURRENT_TIMESTAMP
+) AUTO_INCREMENT = 1001;
 
+SELECT * FROM User;
 
-
-
-
-
-
+DROP TABLE User;
 
