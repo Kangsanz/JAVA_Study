@@ -34,7 +34,7 @@ public class InitializeCourseListener implements ServletContextListener {
 			}
 			context.setAttribute("contentList", contentList);
 			context.log("The course contents has been loaded");
-		} catch (Exception e) {g
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
