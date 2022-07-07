@@ -1,5 +1,6 @@
 <%@page import="java.net.URLEncoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,7 @@
 	<div id="wrapper">
 		<div id="header">
 			<jsp:include page="/incl/banner.jsp">
-				<jsp:param value="<%=URLEncoder.encode(\"mod009 : 회원가입 데이터베이스 테스트\", \"UTF-8\")%>" name="subtitle" />
+				<jsp:param value="<%=URLEncoder.encode(\"회원가입 페이지\", \"UTF-8\")%>" name="subtitle" />
 			</jsp:include>
 		</div>
 		<div id="content-wrapper">

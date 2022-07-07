@@ -13,7 +13,7 @@
 	<div id="wrapper">
 		<div id="header">
 			<jsp:include page="/incl/banner.jsp">
-				<jsp:param value="<%=URLEncoder.encode(\"mod009 : Java Beans and include 한글 테스트\", \"UTF-8\")%>" name="subtitle" />
+				<jsp:param value="<%=URLEncoder.encode(\"에러 페이지\", \"UTF-8\")%>" name="subtitle" />
 			</jsp:include>
 		</div>
 		<div id="content-wrapper">

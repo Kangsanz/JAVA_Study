@@ -47,7 +47,7 @@ public class FindUserServlet extends HttpServlet {
 
 		// 3. 비즈니스 서비스 호출
 		request.setAttribute("userName", userName);
-		List<User> userList = userService.findUser(userName);
+		User userList = userService.findUser(userName);
 		request.setAttribute("userList", userList);
 
 		dispatcher = request.getRequestDispatcher("find_User.jsp");
