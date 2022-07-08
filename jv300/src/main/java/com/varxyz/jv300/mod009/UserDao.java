@@ -36,7 +36,7 @@ public class UserDao {
 //	 전체 고객 검색
 	public List<User> findAllUsers() {
 		String sql = "SELECT * FROM User";
-		List<User> customerList = new ArrayList<>(); // List 배열로 데이터를 받기 위해 배열 생성
+		List<User> userList = new ArrayList<>(); // List 배열로 데이터를 받기 위해 배열 생성
 		try {
 			Connection con = data.getConnection(); // DB와 연결
 			PreparedStatement pstmt = con.prepareStatement(sql); // con에 sql을 입력하는 것을 pstmt에 담음
@@ -50,7 +50,7 @@ public class UserDao {
 					user.setSsn(rs.getString("ssn"));
 					user.setEmail(rs.getString("email"));
 					user.setAddr(rs.getString("addr"));
-					customerList.add(user);
+					userList.add(user);
 				}
 			} finally {
 				data.close(rs, pstmt, con);
@@ -58,7 +58,7 @@ public class UserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return customerList; // List 에 결과값을 받음
+		return userList; // List 에 결과값을 받음
 	}
 
 	// 아이디로 유저 검색
