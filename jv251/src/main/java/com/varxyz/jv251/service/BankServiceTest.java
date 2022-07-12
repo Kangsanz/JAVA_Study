@@ -35,8 +35,8 @@ public class BankServiceTest {
 //		}
 
 		// 3. 고객 등록 확인
-//		Customer customer = service.getCustomerBySsn(ssn);
-//		System.out.println(customer);
+		Customer customer = service.getCustomerBySsn(ssn);
+		System.out.println(customer);
 
 		// 4. 고객 계좌 목록 확인
 		List<Account> myList = service.getAccountsBySsn(ssn);

@@ -14,6 +14,7 @@
 		</jsp:include>
 	</div>
 	<h3>My Page</h3>
+	<label>Last Access Time : </label> ${lastAccessTime}
 	<a href='<c:url value="/mod010/logout" />'>로그아웃</a>
 </body>
 </html>
