@@ -6,5 +6,9 @@
 	<bean name="foo" class="com.varxyz.jvx330.di.example1.Foo">
 		<constructor-arg ref="bar" />
 	</bean>
+	
+	<bean name="foo2" class="com.varxyz.jvx330.di.example1.Foo">
+		<property name="bar" ref="bar"/>
+	</bean>
 	<bean name="bar" class="com.varxyz.jvx330.di.example1.Bar" />
 </beans>

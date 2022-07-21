@@ -10,6 +10,12 @@ public class AppMain {
 
 		Foo foo = context.getBean("foo", Foo.class);
 		System.out.println(foo);
+		
+		Foo foo1 = context.getBean("foo", Foo.class);
+		System.out.println(foo1); // hash 값이 같음, 같은 객체를 재활용하고 있음
+		
+		Foo foo2 = context.getBean("foo2", Foo.class);
+		System.out.println(foo2);
 		context.close();
 	}
 }
