@@ -14,7 +14,7 @@
 			<form action="getBalance" method="post">
 				<label>계좌번호</label>
 				<select name="accountNum" required="required">
-					<c:forEach var="item" items="${accountList}">
+					<c:forEach var="item" items="${accountNum}">
 						<option value="<c:out value="${item}" />"><c:out value="${item}" /></option>
 					</c:forEach>
 				</select>

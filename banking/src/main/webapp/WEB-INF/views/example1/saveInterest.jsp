@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,12 +11,21 @@
 	<main>
 		<div>
 			<h3>계좌 이자 지급</h3>
-			<form action="getAccounts" method="post">
-				<label>계좌를 입력해주세요.</label>
-				<input type="text" name="userId" required="required">
-				<input type="submit" value="계좌 찾기">
+			<form action="saveInterest" method="post">
+				<label>계좌번호</label>
+				<c:forEach var="item" items="${accountNum}">
+					<input type="checkbox" value="<c:out value="${item}" />">
+					<c:out value="${item}" />
+				</c:forEach>
+				<input id="interest" type="text" value="" placeholder="이자율">
+				<input type="submit" value="이자 지급">
 			</form>
 		</div>
 	</main>
+	<script>
+		function myFunction(str) {
+			document.getElementById("interest").value = str;
+		}
+	</script>
 </body>
 </html>

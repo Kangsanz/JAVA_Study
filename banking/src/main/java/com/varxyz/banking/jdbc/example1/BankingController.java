@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -182,21 +183,16 @@ public class BankingController {
 	public ModelAndView getBalanceForm(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		ModelAndView mav = new ModelAndView();
-		List<Account> accountNum = new ArrayList<>();
-
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
 
 			List<Account> accountList = AccountService.getAccounts(dao, userId);
-			Iterator<Account> it = accountList.iterator();
 
-			while (it.hasNext()) {
-				Account str = it.next();
-				System.out.println(str);
-			}
+			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
+			System.out.println("accountNum List: " + accountNum.toString());
 
-			mav.addObject("it", it);
+			mav.addObject("accountNum", accountNum);
 			mav.setViewName("example1/getBalance");
 
 		} catch (BeansException e) {
@@ -233,8 +229,29 @@ public class BankingController {
 
 	// 계좌 이자 지급
 	@GetMapping("/example1/saveInterest")
-	public String saveInterestForm() {
-		return "example1/saveInterest";
+	public ModelAndView saveInterestForm(HttpServletRequest request) {
+		String userId = request.getParameter("userId");
+		ModelAndView mav = new ModelAndView();
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				DataSourceConfig.class)) {
+			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+
+			List<Account> accountList = AccountService.getAccounts(dao, userId);
+
+			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
+			List<Double> interest = accountList.stream().map(Account::getInterestRate).collect(Collectors.toList());
+			System.out.println("accountNum List: " + accountNum.toString());
+
+			mav.addObject("accountNum", accountNum);
+			mav.addObject("interest", interest);
+			mav.setViewName("example1/saveInterest");
+
+		} catch (BeansException e) {
+			System.out.println("saveInterest 오류났음!!");
+		}
+		System.out.println("-saveInterest 불러옴-");
+
+		return mav;
 	}
 
 	@PostMapping("/example1/saveInterest")

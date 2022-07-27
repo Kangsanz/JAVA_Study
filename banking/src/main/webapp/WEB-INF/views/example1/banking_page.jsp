@@ -129,7 +129,10 @@
 					<div class="h-100 p-5 bg-light border rounded-3">
 						<h2>계좌 이자 지급</h2>
 						<p>계좌 이자를 지급할 수 있습니다.</p>
-						<button class="btn btn-primary btn-lg" type="button" onclick="location.href='saveInterest'">클릭</button>
+						<form action="saveInterest" method="get">
+							<input type="hidden" name="userId" value="${userId}" required="required">
+							<input class="btn btn-primary btn-lg" type="submit" value="클릭">
+						</form>
 					</div>
 				</div>
 			</div>
