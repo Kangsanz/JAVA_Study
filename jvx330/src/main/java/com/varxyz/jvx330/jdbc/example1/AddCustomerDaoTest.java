@@ -11,6 +11,8 @@ public class AddCustomerDaoTest {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
 		AddCustomerDao dao = context.getBean("addCustomerDao", AddCustomerDao.class);
 
+//		addCustomer(dao);
+//		addCustomer2(dao);
 		addCustomer3(dao);
 
 		context.close();

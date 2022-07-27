@@ -10,6 +10,7 @@ import com.varxyz.jvx330.jdbc.example1.AddCustomerDataSourceDao;
 //import com.varxyz.jvx330.jdbc.example2.CustomerDao;
 //import com.varxyz.jvx330.jdbc.example3.CustomerDao;
 import com.varxyz.jvx330.jdbc.example4.CustomerDao;
+import com.varxyz.jvx330.jdbc.example5.AccountDao;
 
 @Configuration
 public class DataSourceConfig {
@@ -47,4 +48,8 @@ public class DataSourceConfig {
 		return new CustomerDao(dataSource());
 	}
 
+	@Bean
+	public AccountDao accountDao() {
+		return new AccountDao(dataSource());
+	}
 }
