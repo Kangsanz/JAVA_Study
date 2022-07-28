@@ -380,7 +380,9 @@ public class BankingController {
 			mav.addObject("userId", userId);
 			mav.addObject("allAccountsNum", allAccountsNum);
 			mav.addObject("accountNum", accountNum);
+			mav.addObject("accountNum2", accountNum);
 			mav.addObject("balance", balance);
+			mav.addObject("balance2", balance);
 			mav.setViewName("example1/transfer");
 
 		} catch (BeansException e) {
