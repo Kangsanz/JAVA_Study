@@ -61,8 +61,12 @@ public class AccountService {
 	}
 
 	public static void transfer(AccountDao dao, Double balance, String accountNum) {
+		Account c = new Account();
+		c.setAccountNum(accountNum);
+		c.setBalance(balance);
+
+		dao.transfer(c);
 		System.out.println("-transfer-");
-		dao.transfer(balance, accountNum);
 	}
 
 	// 계좌번호 생성

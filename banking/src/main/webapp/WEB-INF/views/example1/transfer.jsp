@@ -102,41 +102,47 @@
 				</div>
 				<div class="container-fluid col-md-6">
 					<div class="container-fluid col-md-6">
-						<form action="getBalance" method="post">
+						<form action="transfer" method="post">
 							<div class="col-md-12" style="display: flex; justify-content: space-between; align-items: flex-start;">
 								<div class="col-md-6">
 									<label for="accountNum" class="form-label">계좌 선택</label>
-									<select class="input-group has-validation col-md-6 text-center" id="accountNum" name="accountNum" required="required" style="height: 36px; border-radius: 5px; padding-top: 5px;" onchange="myFunction(this.value)">
+									<select class="input-group has-validation col-md-6 text-center" id="accountNum" name="accountNumT" style="height: 36px; border-radius: 5px; padding-top: 5px;" onchange="testFunc()">
 										<c:forEach var="item" items="${accountNum}">
 											<option value="<c:out value="${item}" />"><c:out value="${item}" /></option>
 										</c:forEach>
 									</select>
+
 								</div>
 								<div class="col-md-5">
 									<label for="balance" class="form-label">잔액</label>
 									<div class="input-group has-validation">
-										<select class="input-group has-validation col-md-6 text-center" id="balance" name="balance" style="height: 36px; border-radius: 5px; padding-top: 5px;">
+										<select class="input-group has-validation col-md-6 text-center" id="balance" name="balance" style="display: none; height: 36px; border-radius: 5px; padding-top: 5px;">
 											<c:forEach var="item" items="${balance}">
 												<option value="<c:out value="${item}" />"><c:out value="${item}" /></option>
 											</c:forEach>
 										</select>
+										<input type="text" class="form-control" id="balance0" value="">
 									</div>
 								</div>
 							</div>
 							<div class="col-md-12">
 								<label for="allAccountsNum" class="form-label">대상 계좌</label>
-								<select class="input-group has-validation col-md-6 text-center" id="allAccountsNum" name="allAccountsNum" required="required" style="height: 36px; border-radius: 5px; padding-top: 5px;">
+								<select class="input-group has-validation col-md-6 text-center" id="allAccountsNum" name="allAccountNum" required="required" style="height: 36px; border-radius: 5px; padding-top: 5px;">
 									<c:forEach var="item" items="${allAccountsNum}">
 										<option value="<c:out value="${item}" />"><c:out value="${item}" /></option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="col-md-12">
-								<label for="balance" class="form-label">이체 금액</label>
+								<label for="balanceT" class="form-label">이체 금액</label>
 								<div class="input-group has-validation">
-									<input type="text" class="form-control" id="balance" name="balance" required="required">
+									<input type="text" class="form-control" id="balanceT" name="balanceT" required="required">
 								</div>
 							</div>
+							<input type="hidden" name="userId" value="${userId}">
+							<input type="hidden" name="userId" value="${accountNum}">
+							<input type="hidden" name="userId" value="${allAccountsNum}">
+							<input type="hidden" name="userId" value="${balance}">
 							<input class="btn btn-primary btn-lg" type="submit" value="계좌 이체" style="transform: translateY(100%);">
 						</form>
 					</div>
@@ -151,6 +157,9 @@
 
 					<form class="d-flex justify-content-center" action="banking_page" method="post">
 						<input type="hidden" name="userId" value="${userId}">
+						<input type="hidden" name="userId" value="${accountNum}">
+						<input type="hidden" name="userId" value="${allAccountsNum}">
+						<input type="hidden" name="userId" value="${balance}">
 						<input class="btn btn-secondary btn-lg" type="submit" value="돌아가기">
 					</form>
 				</div>
@@ -159,8 +168,20 @@
 			<footer class="pt-3 mt-4 text-muted border-top"> &copy; KangsanPark Copyright 2022 </footer>
 		</div>
 	</main>
-	<script src="http://code.jquery.com/jquery-latest.min.js">
-		
+	<!-- 	 src="http://code.jquery.com/jquery-latest.min.js" -->
+	<script>
+		window.onload = function() {
+			function testFunc() {
+				var num = document.getElementById("accountNum").selectedIndex;
+				var arr = document.getElementById("balance").options;
+				document.getElementById("balance0").value = arr[num].text;
+			}
+		}
+		function testFunc() {
+			var num = document.getElementById("accountNum").selectedIndex;
+			var arr = document.getElementById("balance").options;
+			document.getElementById("balance0").value = arr[num].text;
+		}
 	</script>
 </body>
 </html>

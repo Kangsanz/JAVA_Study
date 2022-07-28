@@ -318,6 +318,7 @@ public class BankingController {
 	@GetMapping("/example1/transfer")
 	public ModelAndView transferForm(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
+
 		ModelAndView mav = new ModelAndView();
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
@@ -326,7 +327,8 @@ public class BankingController {
 			List<Account> accountList = AccountService.getAccounts(dao, userId);
 			List<Account> allAccountList = AccountService.getAccountsAll(dao);
 
-			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
+			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum)
+					.collect(Collectors.toList());
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			List<Double> balance = accountList.stream().map(Account::getBalance).collect(Collectors.toList());
 			System.out.println("accountNum List: " + accountNum.toString());
@@ -348,9 +350,43 @@ public class BankingController {
 	@PostMapping("/example1/transfer")
 	public ModelAndView transfer(HttpServletRequest request) {
 		String userId = request.getParameter("userId");
+		String accountNumT = request.getParameter("accountNumT");
+		String allAccountNum = request.getParameter("allAccountNum");
+		String balanceT = request.getParameter("balanceT");
+		Double balanceD = Double.parseDouble(balanceT);
+
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("userId", userId);
-		mav.setViewName("example1/transfer");
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				DataSourceConfig.class)) {
+			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			
+			Double balanceA = AccountService.getBalance(dao, accountNumT).getBalance();
+			balanceA -= balanceD;
+			Double balanceAA = AccountService.getBalance(dao, allAccountNum).getBalance();
+			balanceAA += balanceD;
+			
+			AccountService.transfer(dao, balanceA, accountNumT);
+			AccountService.transfer(dao, balanceAA, allAccountNum);
+
+			List<Account> accountList = AccountService.getAccounts(dao, userId);
+			List<Account> allAccountList = AccountService.getAccountsAll(dao);
+
+			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum)
+					.collect(Collectors.toList());
+			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
+			List<Double> balance = accountList.stream().map(Account::getBalance).collect(Collectors.toList());
+			System.out.println("accountNum List: " + accountNum.toString());
+
+			mav.addObject("userId", userId);
+			mav.addObject("allAccountsNum", allAccountsNum);
+			mav.addObject("accountNum", accountNum);
+			mav.addObject("balance", balance);
+			mav.setViewName("example1/transfer");
+
+		} catch (BeansException e) {
+			System.out.println("transfer 오류났음!!");
+		}
+		System.out.println("-transfer 불러옴-");
 
 		return mav;
 	}

@@ -46,8 +46,8 @@ public class AccountDao {
 		jdbcTemplate.update(sql, account.getBalance(), account.getAccountNum());
 	}
 
-	public Account transfer(Double balance, String accountNum) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+	public void transfer(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
 		String sql = "UPDATE Account SET balance = ? WHERE accountNum = ?";
-		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Account>(Account.class), balance, accountNum);
+		jdbcTemplate.update(sql, account.getBalance(), account.getAccountNum());
 	}
 }
