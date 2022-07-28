@@ -13,13 +13,13 @@ public class CustomerDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public void addCustomer(Customer customer) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+	public void addCustomer(Customer customer) {
 		String sql = "INSERT INTO Customer (userId, passwd, name, ssn, phone) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, customer.getUserId(), customer.getPasswd(), customer.getName(), customer.getSsn(),
 				customer.getPhone());
 	}
 
-	public Customer findCustomer(String userId, String passwd) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+	public Customer findCustomer(String userId, String passwd) {
 		String sql = "SELECT * FROM Customer WHERE userId = ? AND passwd = ?";
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Customer>(Customer.class), userId, passwd);
 	}

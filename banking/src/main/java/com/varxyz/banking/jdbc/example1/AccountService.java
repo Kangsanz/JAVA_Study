@@ -4,22 +4,29 @@ import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import com.varxyz.banking.jdbc.Account;
 import com.varxyz.banking.jdbc.DataSourceConfig;
 
 public class AccountService {
-	public static void addAccount(AccountDao dao, Long customerId, String accountNum, String accType, Double balance,
-			Double interestRate) {
+	public static void addAccount(AccountDao dao, Long customerId, String accountNum, String accountPasswd,
+			String accType, Double balance, Double interestRate) {
 		Account c = new Account();
 		c.setCustomerId(customerId);
 		c.setAccountNum(accountNum);
+		c.setAccountPasswd(accountPasswd);
 		c.setAccType(accType);
 		c.setBalance(balance);
 		c.setInterestRate(interestRate);
 
 		dao.addAccount(c);
 		System.out.println("-Account Inserted-");
+	}
+
+	public static List<Account> getAccountsAll(AccountDao dao) {
+		System.out.println("-getAccountsAll-");
+		return dao.getAccountsAll();
 	}
 
 	public static List<Account> getAccounts(AccountDao dao, String userId) {
@@ -42,10 +49,15 @@ public class AccountService {
 		System.out.println("-getBalance-");
 		return dao.getBalance(accountNum);
 	}
-	
-	public static void saveInterest(AccountDao dao, Double balance, String accountNum) {
+
+	public static void saveInterest(AccountDao dao, String accountNum, Double balance) {
+		Account c = new Account();
+		c.setAccountNum(accountNum);
+		c.setBalance(balance);
+		System.out.println(c.getAccountNum() + " / " + c.getBalance());
+
+		dao.saveInterest(c);
 		System.out.println("-saveInterest-");
-		dao.saveInterest(balance, accountNum);
 	}
 
 	public static void transfer(AccountDao dao, Double balance, String accountNum) {

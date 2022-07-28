@@ -16,9 +16,14 @@ public class AccountDao {
 	}
 
 	public void addAccount(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
-		String sql = "INSERT INTO Account (customerId, accountNum, accType, balance, interestRate) VALUES (?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, account.getCustomerId(), account.getAccountNum(), account.getAccType(),
-				account.getBalance(), account.getInterestRate());
+		String sql = "INSERT INTO Account (customerId, accountNum, accountPasswd, accType, balance, interestRate) VALUES (?, ?, ?, ?, ?, ?)";
+		jdbcTemplate.update(sql, account.getCustomerId(), account.getAccountNum(), account.getAccountPasswd(),
+				account.getAccType(), account.getBalance(), account.getInterestRate());
+	}
+
+	public List<Account> getAccountsAll() {
+		String sql = "SELECT * FROM Account";
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Account>(Account.class));
 	}
 
 	public List<Account> getAccounts(String userId) {
@@ -35,10 +40,10 @@ public class AccountDao {
 		String sql = "SELECT * FROM Account WHERE accountNum = ?";
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Account>(Account.class), accountNum);
 	}
-	
-	public Account saveInterest(Double balance, String accountNum) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+
+	public void saveInterest(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
 		String sql = "UPDATE Account SET balance = ? WHERE accountNum = ?";
-		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Account>(Account.class), balance, accountNum);
+		jdbcTemplate.update(sql, account.getBalance(), account.getAccountNum());
 	}
 
 	public Account transfer(Double balance, String accountNum) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음

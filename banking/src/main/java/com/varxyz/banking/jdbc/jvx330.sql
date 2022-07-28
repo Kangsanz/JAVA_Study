@@ -15,6 +15,7 @@ CREATE TABLE Account (
 	aid				BIGINT		PRIMARY KEY AUTO_INCREMENT,
 	customerId		BIGINT		NOT NULL,
 	accountNum		CHAR(11)	NOT NULL, -- 000-00-0000
+	accountPasswd	CHAR(4)		NOT NULL,
 	accType			CHAR(1)		NOT NULL DEFAULT 'S',
 	balance			DOUBLE		NOT NULL DEFAULT 0,
 	interestRate	DOUBLE		NOT NULL DEFAULT 0.0,
@@ -25,5 +26,3 @@ CREATE TABLE Account (
 
 SELECT * FROM Account
 DROP TABLE Account
-
-SELECT balance FROM Account WHERE accountNum = "965-46-3197"

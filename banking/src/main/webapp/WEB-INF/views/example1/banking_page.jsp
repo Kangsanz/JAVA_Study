@@ -9,12 +9,22 @@
 <meta name="description" content="">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 <meta name="generator" content="Hugo 0.101.0">
-<title>Jumbotron example · Bootstrap v5.2</title>
+<title>Online Banking System Page</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/jumbotron/">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/defalut.css'/>">
 
 <style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap')
+	;
+
+.logo {
+	font-family: 'Rajdhani', sans-serif;
+	font-weight: bold;
+}
+
 .bd-placeholder-img {
 	font-size: 1.125rem;
 	text-anchor: middle;
@@ -72,44 +82,52 @@
 <body>
 	<main>
 		<div class="container py-4">
-			<header class="pb-3 mb-4 border-bottom">
-				<div href="#" class="d-flex align-items-center text-dark text-decoration-none" style="justify-content: space-between;">
-					<span class="d-flex fs-4"><strong>Online Banking System</strong></span>
-					<a href="<c:url value='login'/>" class="d-flex justify-content-end text-dark text-decoration-none">
-						<span class="fs-5">로그아웃</span>
+			<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+				<a href=# " class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+					<span class="fs-3 logo">KS BANK</span>
+				</a>
+
+				<div class="col-md-3 text-end">
+					<a href="<c:url value='login'/>" class="btn btn-outline-primary me-2">
+						<span class="fs-5">로그인/로그아웃</span>
 					</a>
 				</div>
-				<br>
-				<p class="col-md-8 fs-4" style="text-align: center; margin: 0 auto;">${userId}님환영합니다.</p>
+				<p class="col-md-8 fs-4" style="text-align: center; margin: 0 auto;">${userId}님&nbsp환영합니다.</p>
 			</header>
 
-			<div class="p-5 mb-4 bg-light rounded-3">
-				<div class="container-fluid py-5">
+			<div class="row p-5 mb-4 bg-light rounded-3">
+				<div class="container-fluid col-md-6">
 					<h1 class="display-5 fw-bold">계좌 목록 확인</h1>
-					<p class="col-md-8 fs-4">계좌 목록을 확인할 수 있습니다.</p>
-					<form action="getAccounts_result" method="post">
-						<input type="hidden" name="userId" value="${userId}" required="required">
-						<input class="btn btn-primary btn-lg" type="submit" value="클릭">
-					</form>
+					<p class="col-md-8 fs-4">계좌 목록을 확인하세요.</p>
+				</div>
+				<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between container-fluid col-md-6" style="height: 250px; overflow: auto;">
+					<c:forEach var="item" items="${accountList}">
+						<ul class="dropdown-menu dropdown-menu-dark position-static d-grid gap-1 p-2 rounded-3 mx-0 border-0 shadow w-220px">
+							<li class="dropdown-item rounded-2"><c:out value="${item}" /></li>
+						</ul>
+					</c:forEach>
 				</div>
 			</div>
 
 			<div class="row align-items-md-stretch">
 				<div class="col-md-6">
 					<div class="h-100 p-5 text-bg-dark rounded-3">
-						<h2>신규 계좌 신청</h2>
-						<p>신규 계좌를 신청할 수 있습니다.</p>
-						<form action="add_account" method="get">
-							<input type="hidden" name="userId" value="${userId}" required="required">
+						<h2>계좌 잔고 확인</h2>
+						<p>계좌 잔고를 확인할 수 있습니다.</p>
+						<form action="getBalance" method="get">
+							<input type="hidden" value="${userId}" name="userId">
 							<input class="btn btn-primary btn-lg" type="submit" value="클릭">
 						</form>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="h-100 p-5 text-bg-dark border rounded-3">
-						<h2>계좌 이체</h2>
-						<p>계좌 이체를 할 수 있습니다.</p>
-						<button class="btn btn-primary btn-lg" type="button" onclick="location.href='getAccounts'">클릭</button>
+						<h2>계좌 이자 지급</h2>
+						<p>계좌 이자를 지급할 수 있습니다.</p>
+						<form action="saveInterest" method="get">
+							<input type="hidden" name="userId" value="${userId}">
+							<input class="btn btn-primary btn-lg" type="submit" value="클릭">
+						</form>
 					</div>
 				</div>
 			</div>
@@ -117,20 +135,20 @@
 			<div class="row align-items-md-stretch">
 				<div class="col-md-6">
 					<div class="h-100 p-5 bg-light border rounded-3">
-						<h2>계좌 잔고 확인</h2>
-						<p>계좌 잔고를 확인할 수 있습니다.</p>
-						<form action="getBalance" method="get">
-							<input type="hidden" name="userId" value="${userId}" required="required">
+						<h2>신규 계좌 신청</h2>
+						<p>신규 계좌를 신청할 수 있습니다.</p>
+						<form action="add_account" method="get">
+							<input type="hidden" name="userId" value="${userId}">
 							<input class="btn btn-primary btn-lg" type="submit" value="클릭">
 						</form>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="h-100 p-5 bg-light border rounded-3">
-						<h2>계좌 이자 지급</h2>
-						<p>계좌 이자를 지급할 수 있습니다.</p>
-						<form action="saveInterest" method="get">
-							<input type="hidden" name="userId" value="${userId}" required="required">
+						<h2>계좌 이체</h2>
+						<p>계좌 이체를 할 수 있습니다.</p>
+						<form action="transfer" method="get">
+							<input type="hidden" name="userId" value="${userId}">
 							<input class="btn btn-primary btn-lg" type="submit" value="클릭">
 						</form>
 					</div>

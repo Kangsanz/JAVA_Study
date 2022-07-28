@@ -14,6 +14,7 @@ public class Account {
 	private long aid;
 	private long customerId;
 	private String accountNum;
+	private String accountPasswd;
 	private String accType;
 	private Double balance;
 	private Double interestRate;
@@ -25,7 +26,6 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "계좌 정보 [" + "계좌번호 = " + accountNum + " / 계좌타입 = " + accType + " / 잔액 = " + balance + " / 이자율 = "
-				+ interestRate + "% / 계좌 개설 시간 = " + regDate + "]";
+		return "계좌번호 = " + accountNum + " / 이자율 = " + interestRate + "%" + " / 계좌 타입 = " + accType;
 	}
 }

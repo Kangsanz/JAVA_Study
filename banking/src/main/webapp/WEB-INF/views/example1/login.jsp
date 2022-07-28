@@ -13,9 +13,19 @@
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/defalut.css'/>">
 
 
 <style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap')
+	;
+
+.logo {
+	font-family: 'Rajdhani', sans-serif;
+	font-weight: bold;
+}
+
 .bd-placeholder-img {
 	font-size: 1.125rem;
 	text-anchor: middle;
@@ -73,24 +83,23 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/signin.css'/>">
 
 </head>
-<body class="text-center">
+<body class="text-center" style="background-color: lightblue;">
 
 	<main class="form-signin w-100 m-auto">
 		<form action="login" method="post">
 			<h1 class="h3 mb-3 fw-normal">
-				<strong>Banking System Login</strong><br>
+				<strong class="logo">Banking System Login</strong><br>
 			</h1>
 
 			<div class="form-floating">
 				<input type="text" class="form-control" id="floatingInput" name="userId" placeholder="아이디를 입력해주세요.">
-				<label for="floatingInput">회원ID</label>
+				<label for="floatingInput">고객ID</label>
 			</div>
 			<div class="form-floating">
 				<input type="password" class="form-control" id="floatingPassword" name="passwd" placeholder="Password">
 				<label for="floatingPassword">비밀번호</label>
 			</div>
 			<button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
-
 			<div class="mb-3">
 				<a href="add_customer">회원가입</a>
 			</div>
