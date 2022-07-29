@@ -171,11 +171,9 @@
 	<!-- 	 src="http://code.jquery.com/jquery-latest.min.js" -->
 	<script>
 		window.onload = function() {
-			function testFunc() {
-				var num = document.getElementById("accountNum").selectedIndex;
-				var arr = document.getElementById("balance").options;
-				document.getElementById("balance0").value = arr[num].text;
-			}
+			var num = document.getElementById("accountNum").selectedIndex;
+			var arr = document.getElementById("balance").options;
+			document.getElementById("balance0").value = arr[num].text;
 		}
 		function testFunc() {
 			var num = document.getElementById("accountNum").selectedIndex;

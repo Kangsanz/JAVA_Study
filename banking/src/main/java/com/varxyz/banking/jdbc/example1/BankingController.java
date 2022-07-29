@@ -1,9 +1,7 @@
 package com.varxyz.banking.jdbc.example1;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,21 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.varxyz.banking.jdbc.Account;
-import com.varxyz.banking.jdbc.Customer;
 import com.varxyz.banking.jdbc.DataSourceConfig;
 
-@Controller("example1.bankingController")
+@Controller("example1.BankingController")
 public class BankingController {
 
 	@GetMapping("/example1/login")
 	public String loginForm() {
-		return "example1/login";
+		return "/example1/login";
 	}
 
 	@PostMapping("/example1/login")
@@ -40,15 +36,17 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao adao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			accountList = AccountService.getAccounts(adao, userId);
+			accountList = accountService.getAccounts(adao, userId);
 
 			mav.addObject("userId", userId);
 			mav.addObject("accountList", accountList);
 
 			CustomerDao dao = context.getBean("customerDao", CustomerDao.class);
+			CustomerServiceImpl customerService = context.getBean("customerServiceImpl", CustomerServiceImpl.class);
 
-			if (CustomerService.findCustomer(dao, userId, passwd)) {
+			if (customerService.findCustomer(dao, userId, passwd)) {
 				// 로그인 성공
 				mav.addObject("userId", userId);
 				mav.setViewName("example1/banking_page");
@@ -56,10 +54,11 @@ public class BankingController {
 				mav.addObject("msg", "로그인 실패");
 				mav.setViewName("example1/login");
 			}
-			CustomerService.findCustomer(dao, userId, passwd);
+			customerService.findCustomer(dao, userId, passwd);
 
 		} catch (BeansException e) {
-			System.out.println("add_customer 오류남!");
+			System.out.println("login 오류났음!!");
+			e.printStackTrace();
 		}
 		return mav;
 	}
@@ -80,8 +79,9 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			accountList = AccountService.getAccounts(dao, userId);
+			accountList = accountService.getAccounts(dao, userId);
 			System.out.println(accountList);
 
 			mav.addObject("userId", userId);
@@ -90,6 +90,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("getAccounts 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-getAccounts Inserted-");
 
@@ -122,10 +123,12 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			CustomerDao dao = context.getBean("customerDao", CustomerDao.class);
+			CustomerServiceImpl customerService = context.getBean("customerServiceImpl", CustomerServiceImpl.class);
 
-			CustomerService.addCustomer(dao, userId, passwd, name, ssn, phone);
+			customerService.addCustomer(dao, userId, passwd, name, ssn, phone);
 		} catch (BeansException e) {
 			System.out.println("add_customer 오류남!");
+			e.printStackTrace();
 		}
 
 		System.out.println("-Customer Inserted-");
@@ -149,16 +152,14 @@ public class BankingController {
 		Long customerId = null;
 		String userId = request.getParameter("userId");
 
-		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-				DataSourceConfig.class)) {
-			CustomerDao dao = context.getBean("customerDao", CustomerDao.class);
-			customerId = CustomerService.getCustomerByAccountNum(dao, userId).getCid();
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
+		CustomerDao cdao = context.getBean("customerDao", CustomerDao.class);
+		AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
+		CustomerServiceImpl customerService = context.getBean("customerServiceImpl", CustomerServiceImpl.class);
+		customerId = customerService.getCustomerByUserId(cdao, userId).getCid();
 
-		} catch (BeansException e) {
-			System.out.println("getCustomerByAccountNum 오류났음!!");
-		}
 		System.out.println("오류 어서 뜸?");
-		String accountNum = AccountService.checkAccountNum();
+		String accountNum = accountService.checkAccountNum();
 		String accountPasswd = request.getParameter("accountPasswd");
 		System.out.println(accountPasswd);
 		String accType = request.getParameter("accType");
@@ -176,14 +177,9 @@ public class BankingController {
 		mav.addObject("interestRate", interestRate);
 		mav.setViewName("example1/add_account");
 
-		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-				DataSourceConfig.class)) {
-			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+		AccountDao adao = context.getBean("accountDao", AccountDao.class);
 
-			AccountService.addAccount(dao, customerId, accountNum, accountPasswd, accType, balanceD, interestRateD);
-		} catch (BeansException e) {
-			System.out.println("add_account 오류났음!!");
-		}
+		accountService.addAccount(adao, customerId, accountNum, accountPasswd, accType, balanceD, interestRateD);
 		System.out.println("-Account Inserted-");
 
 		return mav;
@@ -197,8 +193,9 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
 
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			System.out.println("accountNum List: " + accountNum.toString());
@@ -209,6 +206,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("getBalance 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-getBalance 불러옴-");
 
@@ -225,10 +223,11 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			Double balance = AccountService.getBalance(dao, accountNum2).getBalance();
+			Double balance = accountService.getBalance(dao, accountNum2).getBalance();
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			System.out.println("accountNum List: " + accountNum.toString());
 
@@ -239,6 +238,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("getBalance 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-getBalance Inserted-");
 
@@ -253,8 +253,9 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
 
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			List<Double> balance = accountList.stream().map(Account::getBalance).collect(Collectors.toList());
@@ -269,6 +270,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("saveInterest 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-saveInterest 불러옴-");
 
@@ -284,17 +286,18 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			Double interestD = AccountService.getBalance(dao, check).getInterestRate();
-			Double balanceD = AccountService.getBalance(dao, check).getBalance();
+			Double interestD = accountService.getBalance(dao, check).getInterestRate();
+			Double balanceD = accountService.getBalance(dao, check).getBalance();
 
 			Double balanceI = balanceD * interestD / 100;
 			balanceD += balanceI;
 			System.out.println(check + " / " + balanceD);
 
-			AccountService.saveInterest(dao, check, balanceD);
+			accountService.saveInterest(dao, check, balanceD);
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
 
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			List<Double> balance = accountList.stream().map(Account::getBalance).collect(Collectors.toList());
@@ -308,6 +311,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("saveInterest 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-saveInterest Inserted-");
 
@@ -323,12 +327,12 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
-			List<Account> allAccountList = AccountService.getAccountsAll(dao);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
+			List<Account> allAccountList = accountService.getAccountsAll(dao);
 
-			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum)
-					.collect(Collectors.toList());
+			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			List<String> accountNum = accountList.stream().map(Account::getAccountNum).collect(Collectors.toList());
 			List<Double> balance = accountList.stream().map(Account::getBalance).collect(Collectors.toList());
 			System.out.println("accountNum List: " + accountNum.toString());
@@ -339,8 +343,11 @@ public class BankingController {
 			mav.addObject("balance", balance);
 			mav.setViewName("example1/transfer");
 
+
+			
 		} catch (BeansException e) {
 			System.out.println("transfer 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-transfer 불러옴-");
 
@@ -359,17 +366,18 @@ public class BankingController {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
 			AccountDao dao = context.getBean("accountDao", AccountDao.class);
+			AccountServiceImpl accountService = context.getBean("accountServiceImpl", AccountServiceImpl.class);
 
-			Double balanceA = AccountService.getBalance(dao, accountNumT).getBalance();
+			Double balanceA = accountService.getBalance(dao, accountNumT).getBalance();
 			balanceA -= balanceD;
-			Double balanceAA = AccountService.getBalance(dao, allAccountNum).getBalance();
+			Double balanceAA = accountService.getBalance(dao, allAccountNum).getBalance();
 			balanceAA += balanceD;
 
-			AccountService.transfer(dao, balanceA, accountNumT);
-			AccountService.transfer(dao, balanceAA, allAccountNum);
+			accountService.transfer(dao, balanceA, accountNumT);
+			accountService.transfer(dao, balanceAA, allAccountNum);
 
-			List<Account> accountList = AccountService.getAccounts(dao, userId);
-			List<Account> allAccountList = AccountService.getAccountsAll(dao);
+			List<Account> accountList = accountService.getAccounts(dao, userId);
+			List<Account> allAccountList = accountService.getAccountsAll(dao);
 
 			List<String> allAccountsNum = allAccountList.stream().map(Account::getAccountNum)
 					.collect(Collectors.toList());
@@ -387,6 +395,7 @@ public class BankingController {
 
 		} catch (BeansException e) {
 			System.out.println("transfer 오류났음!!");
+			e.printStackTrace();
 		}
 		System.out.println("-transfer 불러옴-");
 

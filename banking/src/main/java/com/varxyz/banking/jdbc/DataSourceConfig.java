@@ -6,7 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.varxyz.banking.jdbc.example1.AccountDao;
+import com.varxyz.banking.jdbc.example1.AccountServiceImpl;
 import com.varxyz.banking.jdbc.example1.CustomerDao;
+import com.varxyz.banking.jdbc.example1.CustomerServiceImpl;
+
+
 
 @Configuration
 public class DataSourceConfig {
@@ -37,5 +41,15 @@ public class DataSourceConfig {
 	@Bean
 	public AccountDao accountDao() {
 		return new AccountDao(dataSource());
+	}
+	
+	@Bean
+	public CustomerServiceImpl customerServiceImpl() {
+		return new CustomerServiceImpl(dataSource());
+	}
+	
+	@Bean
+	public AccountServiceImpl accountServiceImpl() {
+		return new AccountServiceImpl(dataSource());
 	}
 }

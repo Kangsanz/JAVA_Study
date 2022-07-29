@@ -15,38 +15,33 @@ public class AccountDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public void addAccount(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+	// 계좌 생성
+	public void addAccount(Account account) {
 		String sql = "INSERT INTO Account (customerId, accountNum, accountPasswd, accType, balance, interestRate) VALUES (?, ?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, account.getCustomerId(), account.getAccountNum(), account.getAccountPasswd(),
 				account.getAccType(), account.getBalance(), account.getInterestRate());
 	}
 
+	// 전체 계좌 조회
 	public List<Account> getAccountsAll() {
 		String sql = "SELECT * FROM Account";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Account>(Account.class));
 	}
 
-	public List<Account> getAccounts(String userId) {
+	// userId 로 계좌 조회
+	public List<Account> getAccountsByUserId(String userId) {
 		String sql = "SELECT * FROM Account a INNER JOIN Customer c ON a.customerId = c.cid WHERE c.userId = ?";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Account>(Account.class), userId);
 	}
 
+	// 계좌 번호로 계좌 조회
 	public Account getAccountsByAccountNum(String accountNum) {
 		String sql = "SELECT * FROM Account WHERE accountNum = ?";
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Account>(Account.class), accountNum);
 	}
 
-	public Account getBalance(String accountNum) {
-		String sql = "SELECT * FROM Account WHERE accountNum = ?";
-		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Account>(Account.class), accountNum);
-	}
-
-	public void saveInterest(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
-		String sql = "UPDATE Account SET balance = ? WHERE accountNum = ?";
-		jdbcTemplate.update(sql, account.getBalance(), account.getAccountNum());
-	}
-
-	public void transfer(Account account) { // 실전에서 쓰는 방법, 위의 방법과 값은 같음
+	// 계좌 번호로 잔액 수정
+	public void setBalanceByAccountNum(Account account) {
 		String sql = "UPDATE Account SET balance = ? WHERE accountNum = ?";
 		jdbcTemplate.update(sql, account.getBalance(), account.getAccountNum());
 	}

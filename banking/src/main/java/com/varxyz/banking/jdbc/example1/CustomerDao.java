@@ -13,18 +13,21 @@ public class CustomerDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	// 고객 추가
 	public void addCustomer(Customer customer) {
 		String sql = "INSERT INTO Customer (userId, passwd, name, ssn, phone) VALUES (?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, customer.getUserId(), customer.getPasswd(), customer.getName(), customer.getSsn(),
 				customer.getPhone());
 	}
 
+	// 고객 확인
 	public Customer findCustomer(String userId, String passwd) {
 		String sql = "SELECT * FROM Customer WHERE userId = ? AND passwd = ?";
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Customer>(Customer.class), userId, passwd);
 	}
 
-	public Customer getCustomerByAccountNum(String userId) {
+	//  userId로 고객 찾기
+	public Customer getCustomerByUserId(String userId) {
 		String sql = "SELECT * FROM Customer WHERE userId = ?";
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Customer>(Customer.class), userId);
 	}

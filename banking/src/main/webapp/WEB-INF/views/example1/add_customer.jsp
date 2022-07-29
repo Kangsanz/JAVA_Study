@@ -92,7 +92,7 @@
 							<div class="col-md-6">
 								<label for="passwd" class="form-label">비밀번호</label>
 								<div class="input-group has-validation">
-									<input type="password" class="form-control" id="passwd" name="passwd" required="required">
+									<input type="password" class="form-control" id="passwd" name="passwd" pattern=".{4,4}" required title="비밀번호는 4자리 입니다" placeholder="0000">
 								</div>
 							</div>
 
@@ -106,17 +106,13 @@
 							<div class="col-md-6">
 								<label for="ssn" class="form-label">주민등록번호</label>
 								<div class="input-group has-validation">
-									<input type="text" class="form-control" id="ssn" name="ssn" required="required">
+									<input type="tel" name="ssn" class="form-control" id="ssn" title="주민등록번호를 입력하세요." placeholder="900000-1232123" pattern="[0-9]{5,6}-[0-9]{6,7}" maxlength="14">
 								</div>
 							</div>
 
 							<div class="col-md-6">
 								<label for="phone" class="form-label">전화번호</label>
-								<select class="form-select" id="" phone"" name="phone" required>
-									<option value="010" selected="selected">010</option>
-									<option value="02">02</option>
-									<option value="053">053</option>
-								</select>
+								<input type="tel" name="phone" class="form-control" id="phone" title="전화번호를 입력하세요." placeholder="010-0000-0000" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{3,4}" maxlength="13">
 							</div>
 
 							<input class="w-100 btn btn-primary btn-lg" type="submit" value="회원가입">

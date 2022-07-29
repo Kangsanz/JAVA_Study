@@ -92,7 +92,7 @@
 							<div class="col-md-6">
 								<label for="accountPasswd" class="form-label">계좌 비밀번호</label>
 								<div class="input-group has-validation">
-									<input type="text" class="form-control" id="accountPasswd" name="accountPasswd" required="required">
+									<input type="password" class="form-control" id="accountPasswd" name="accountPasswd" pattern=".{4,4}" required title="비밀번호는 4자리 입니다" placeholder="0000">
 								</div>
 							</div>
 
