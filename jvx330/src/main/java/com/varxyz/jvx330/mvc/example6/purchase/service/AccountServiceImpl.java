@@ -1,4 +1,4 @@
-package com.varxyz.banking.jdbc.example1;
+package com.varxyz.jvx330.mvc.example6.purchase.service;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ import com.varxyz.banking.jdbc.DataSourceConfig;
 public class AccountServiceImpl implements AccountService {
 
 	@Autowired
-	private AccountDao dao;
+	private PurchaseDao dao;
 
 	public AccountServiceImpl(DataSource datasource) {
-		dao = new AccountDao(datasource);
+		dao = new PurchaseDao(datasource);
 	}
 
 	@Override
-	public void addAccount(AccountDao dao, Long customerId, String accountNum, String accountPasswd, String accType,
+	public void addAccount(PurchaseDao dao, Long customerId, String accountNum, String accountPasswd, String accType,
 			Double balance, Double interestRate) {
 		Account c = new Account();
 		c.setCustomerId(customerId);
@@ -35,45 +35,19 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public List<Account> getAccountsAll(AccountDao dao) {
+	public List<Account> getAccountsAll(PurchaseDao dao) {
 		System.out.println("-getAccountsAll-");
 		return dao.getAccountsAll();
 	}
 
 	@Override
-	public List<Account> getAccounts(AccountDao dao, String userId) {
+	public List<Account> getAccounts(PurchaseDao dao, String userId) {
 		System.out.println("-getAccounts-");
 		return dao.getAccountsByUserId(userId);
 	}
 
 	@Override
-	public Account getBalance(AccountDao dao, String accountNum) {
-		System.out.println("-getBalance-");
-		return dao.getAccountsByAccountNum(accountNum);
-	}
-
-	@Override
-	public void saveInterest(AccountDao dao, String accountNum, Double balance) {
-		Account c = new Account();
-		c.setAccountNum(accountNum);
-		c.setBalance(balance);
-		System.out.println(c.getAccountNum() + " / " + c.getBalance());
-
-		dao.setBalanceByAccountNum(c);
-		System.out.println("-saveInterest-");
-	}
-
-	@Override
-	public void transfer(AccountDao dao, Double balance, String accountNum) {
-		Account c = new Account();
-		c.setAccountNum(accountNum);
-		c.setBalance(balance);
-
-		dao.setBalanceByAccountNum(c);
-		System.out.println("-transfer-");
-	}
-
-	public boolean getAccountsByAccountNum(AccountDao dao, String accountNum) {
+	public boolean getAccountsByAccountNum(PurchaseDao dao, String accountNum) {
 		System.out.println("-getAccounts-");
 		boolean result = false;
 		try {
@@ -84,7 +58,35 @@ public class AccountServiceImpl implements AccountService {
 		return result;
 	}
 
+	@Override
+	public Account getBalance(PurchaseDao dao, String accountNum) {
+		System.out.println("-getBalance-");
+		return dao.getAccountsByAccountNum(accountNum);
+	}
+
+	@Override
+	public void saveInterest(PurchaseDao dao, String accountNum, Double balance) {
+		Account c = new Account();
+		c.setAccountNum(accountNum);
+		c.setBalance(balance);
+		System.out.println(c.getAccountNum() + " / " + c.getBalance());
+
+		dao.setBalanceByAccountNum(c);
+		System.out.println("-saveInterest-");
+	}
+
+	@Override
+	public void transfer(PurchaseDao dao, Double balance, String accountNum) {
+		Account c = new Account();
+		c.setAccountNum(accountNum);
+		c.setBalance(balance);
+
+		dao.setBalanceByAccountNum(c);
+		System.out.println("-transfer-");
+	}
+
 	// 계좌번호 생성
+	@Override
 	public String geneAccountNum() {
 		String AccountNum = "";
 
@@ -104,9 +106,10 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	// 계좌번호 중복 확인
+	@Override
 	public String checkAccountNum() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
-		AccountDao dao = context.getBean("accountDao", AccountDao.class);
+		PurchaseDao dao = context.getBean("accountDao", PurchaseDao.class);
 		String result = null;
 
 		String accountNum = geneAccountNum();
