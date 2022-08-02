@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.varxyz.jvx330.mvc.example6.product.repository.ProductDao;
-import com.varxyz.jvx330.mvc.example6.purchase.repository.PurchaseDao;
+//import com.varxyz.jvx330.mvc.example6.purchase.repository.PurchaseDao;
+import com.varxyz.jvx330.mvc.example6.product.service.ProductServiceImpl;
 
 @Configuration
 public class DataSourceConfig {
@@ -15,7 +16,7 @@ public class DataSourceConfig {
 	public DataSource dataSource() {
 		DataSource ds = new DataSource();
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		ds.setUrl("jdbc:mysql://localhost:3306/jvx330?serverTimezone=Asia/Seoul");
+		ds.setUrl("jdbc:mysql://localhost:3306/javacafe?serverTimezone=Asia/Seoul");
 		ds.setUsername("javacafe");
 		ds.setPassword("javacafe");
 		ds.setInitialSize(2); // 커넥션 풀 초기화 시 생성할 초기 커넥션 갯수 (기본값 10)
@@ -34,9 +35,19 @@ public class DataSourceConfig {
 		return new ProductDao(dataSource());
 	}
 
+//	@Bean
+//	public PurchaseDao purchaseDao() {
+//		return new PurchaseDao(dataSource());
+//	}
+
 	@Bean
-	public PurchaseDao purchaseDao() {
-		return new PurchaseDao(dataSource());
+	public ProductServiceImpl productServiceImpl() {
+		return new ProductServiceImpl(dataSource());
 	}
+
+//	@Bean
+//	public PurchaseServiceImpl purchaseServiceImpl() {
+//		return new PurchaseServiceImpl(dataSource());
+//	}
 
 }

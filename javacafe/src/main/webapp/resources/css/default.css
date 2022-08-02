@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+.container.py-4 {
+	text-align: center;
+}
+
+.marginAuto {
+	margin: 0 auto;
+}
+
+footer {
+	text-align: center;
+}

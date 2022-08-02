@@ -1,11 +1,14 @@
 package com.varxyz.jvx330.mvc.example6.product.repository;
 
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.varxyz.jvx330.mvc.example6.category.domain.BigCategory;
+import com.varxyz.jvx330.mvc.example6.category.domain.MidCategory;
 import com.varxyz.jvx330.mvc.example6.product.domain.Product;
 
 public class ProductDao {

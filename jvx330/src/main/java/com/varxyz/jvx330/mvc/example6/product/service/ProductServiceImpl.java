@@ -2,10 +2,20 @@ package com.varxyz.jvx330.mvc.example6.product.service;
 
 import java.util.List;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.varxyz.jvx330.mvc.example6.product.domain.Product;
 import com.varxyz.jvx330.mvc.example6.product.repository.ProductDao;
 
 public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private ProductDao dao;
+
+	public ProductServiceImpl(DataSource datasource) {
+		dao = new ProductDao(datasource);
+	}
 
 	@Override
 	public void addProduct(ProductDao dao, int proMidCategory, String proName, Long proPrice, String proImage) {
