@@ -42,7 +42,7 @@ public class ProductDao {
 
 	// 작은 카테고리로 상품 조회
 	public List<Product> getProductsByMidCategory(ProductDao dao, String midName) {
-		String sql = "SELECT * FROM Product a INNER JOIN MidCategory b ON a.proBigCategory = b.bid WHERE b.MidName = ?";
+		String sql = "SELECT * FROM Product a INNER JOIN MidCategory b ON a.proMidCategory = b.mid WHERE b.MidName = ?";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Product>(Product.class), midName);
 	}
 }

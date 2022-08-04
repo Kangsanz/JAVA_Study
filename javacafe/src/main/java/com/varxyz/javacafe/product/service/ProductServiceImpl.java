@@ -1,5 +1,6 @@
 package com.varxyz.javacafe.product.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -50,6 +51,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getProductsByMidCategory(ProductDao dao, String midName) {
 		System.out.println("-getProductsByBigCategory-");
-		return dao.getProductsByBigCategory(dao, midName);
+		return dao.getProductsByMidCategory(dao, midName);
 	}
+
+	public String[] splits(String string) {
+		return string.replace("[", "").replace("]", "").replace(" ", "").split(",");
+	}
+	
+	public boolean getBoolean() {
+		return true;
+	}
+
 }
