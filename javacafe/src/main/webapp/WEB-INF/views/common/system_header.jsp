@@ -78,11 +78,13 @@
 </style>
 
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/default.css'/>">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/default.js'/>"></script>
 
 </head>
 <body>
 	<main>
-		<div class="container py-4">
+		<div class="container py-4 mainBgColor">
 			<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
 				<a href=# " class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
 					<span class="fs-3 logo">Java Cafe Manager System</span>

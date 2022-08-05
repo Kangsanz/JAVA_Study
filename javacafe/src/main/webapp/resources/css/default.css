@@ -8,10 +8,20 @@
 	margin: 0 auto;
 }
 
+.mainBgColor {
+	background-color: #708090;
+	border-radius: 10px;
+}
+
+.font-bold {
+	font-weight: bold;
+}
+
 .cart {
 	height: 210px;
-	margin-bottom: 80px;
+/* 	margin-bottom: 80px; */
 	overflow-y: scroll;
+	background-color: #fff;
 }
 
 .cart .form-control-plaintext {
@@ -24,7 +34,12 @@
 
 .totalPrice {
 	right: 7%;
+	bottom: 2%;
 	z-index: 0;
+}
+
+.amountBtn {
+	height: 38px;
 }
 
 .footer {

@@ -78,18 +78,20 @@
 </style>
 
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/default.css'/>">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/default.js'/>"></script>
 
 </head>
 <body>
 	<main>
-		<div class="position-relative container py-4">
+		<div class="position-relative container py-4 mainBgColor">
 			<header class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-4 border-bottom">
-				<a href="<c:url value='product_page'/>" class="d-flex align-items-center text-dark text-decoration-none">
+				<a href="<c:url value='../product/product_page'/>" class="d-flex align-items-center text-dark text-decoration-none">
 					<span class="fs-3 logo text-center">Java Cafe</span>
 				</a>
 			</header>
-			<div class="position-absolute top-0 end-0" style="transform: translateY(89%);">
-				<a href="<c:url value='addProduct_page'/>" class="btn btn-outline-primary me-2">
+			<div class="position-absolute top-0 end-0" style="transform: translate(-30%, 60%);">
+				<a href="<c:url value='../product/addProduct_page'/>" class="btn btn-dark">
 					<span class="fs-5">관리자</span>
 				</a>
 			</div>

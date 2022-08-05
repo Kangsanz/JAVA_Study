@@ -2,93 +2,134 @@ package com.varxyz.javacafe.purchase.web;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.varxyz.javacafe.category.domain.BigCategory;
-import com.varxyz.javacafe.category.domain.MidCategory;
-import com.varxyz.javacafe.category.repository.CategoryDao;
-import com.varxyz.javacafe.category.service.CategoryServiceImpl;
 import com.varxyz.javacafe.config.DataSourceConfig;
-import com.varxyz.javacafe.product.domain.Product;
-import com.varxyz.javacafe.product.repository.ProductDao;
 import com.varxyz.javacafe.product.service.ProductServiceImpl;
 
 @Controller("purchase.purchaseController")
 public class PurchaseController {
 
+	@PostMapping("/purchase/purchase_page")
+	public ModelAndView purchase(HttpServletRequest request, HttpSession session) {
+		String proName = request.getParameter("proName");
+		String proPrice = request.getParameter("proPrice");
+		Object totalPriceO = session.getAttribute("totalPrice");
+		String totalPrice = String.valueOf(totalPriceO);
+		Object cartItemListO = session.getAttribute("cartItemList");
+		String cartItemList = String.valueOf(cartItemListO);
 
-	@PostMapping("/product/product_page1")
-	public ModelAndView login(HttpServletRequest request) {
-		String categoryProducts = request.getParameter("categoryProducts");
-		String productsPrice = request.getParameter("productsPrice");
-		String product = request.getParameter("product");
-		String cartListString = request.getParameter("cartList");
-		String cartPrice = request.getParameter('"' + product + '"');
+		if ("null".equals(totalPrice)) {
+			totalPrice = null;
+		}
+
+		if ("null".equals(cartItemList)) {
+			cartItemList = null;
+		}
 
 		ModelAndView mav = new ModelAndView();
 
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
-			ProductDao dao = context.getBean("productDao", ProductDao.class);
-			CategoryDao cDao = context.getBean("categoryDao", CategoryDao.class);
 			ProductServiceImpl productService = context.getBean("productServiceImpl", ProductServiceImpl.class);
-			CategoryServiceImpl categoryService = context.getBean("categoryServiceImpl", CategoryServiceImpl.class);
 
-			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
-			List<MidCategory> midCategoryList = categoryService.getMidCategoryAll(cDao);
+			mav.addObject("proName", proName);
+			mav.addObject("proPrice", proPrice);
 
-			List<String> bigCategoryListName = bigCategoryList.stream().map(BigCategory::getBigName)
-					.collect(Collectors.toList());
-			List<String> midCategoryListName = midCategoryList.stream().map(MidCategory::getMidName)
-					.collect(Collectors.toList());
-
-			mav.addObject("bigCategoryListName", bigCategoryListName);
-			mav.addObject("midCategoryListName", midCategoryListName);
-
-			String[] splits1 = productService.splits(categoryProducts);
-			String[] splits2 = productService.splits(productsPrice);
-			String[] splits3 = productService.splits(cartListString);
-
-			ArrayList<String> categoryProductsList = new ArrayList<>(Arrays.asList(splits1));
-			ArrayList<String> productsPriceList = new ArrayList<>(Arrays.asList(splits2));
-			ArrayList<String> cartList = new ArrayList<>(Arrays.asList(splits3));
-
-			if (cartList.contains("")) {
-				cartList.clear();
+			String[] splits1 = productService.splits(cartItemList);
+			ArrayList<String> cartItemList2 = null;
+			if (splits1 != null) {
+				cartItemList2 = new ArrayList<>(Arrays.asList(splits1));
 			}
 
-			int cartPriceInt = 0;
-			if (cartPrice != null) {
-				cartPriceInt = Integer.parseInt(cartPrice);
-				if (cartList.contains(product)) {
-					cartPriceInt += 1;
-				} else {
-					cartList.add(product);
-				}
-			} else {
-				cartList.add(product);
-			}
+			mav.addObject("cartItemList", cartItemList2);
 
-			mav.addObject("categoryProducts", categoryProductsList);
-			mav.addObject("productsPrice", productsPriceList);
-			mav.addObject("bigCategoryListName", bigCategoryListName);
-			mav.addObject("midCategoryListName", midCategoryListName);
-			mav.addObject("cartList", cartList);
-			mav.addObject(product, cartPriceInt);
-			mav.setViewName("product/product_page");
+			mav.addObject("totalPrice", totalPrice);
+
+			mav.setViewName("purchase/purchase_page");
 
 		} catch (BeansException e) {
-			System.out.println("loginForm 오류났음!!");
+			System.out.println("midForm 오류났음!!");
+			e.printStackTrace();
+		}
+		return mav;
+	}
+
+	@PostMapping("/purchase/purchase_page_result")
+	public ModelAndView purchaseResult(HttpServletRequest request, HttpSession session) {
+		String proName = request.getParameter("proName");
+		String proPrice = request.getParameter("proPrice");
+		String proAmount = request.getParameter("proAmount");
+		Object totalPriceO = session.getAttribute("totalPrice");
+		String totalPrice = String.valueOf(totalPriceO);
+		Object cartItemListO = session.getAttribute("cartItemList");
+		String cartItemList = String.valueOf(cartItemListO);
+
+		if ("null".equals(totalPrice)) {
+			totalPrice = null;
+		}
+
+		if ("null".equals(cartItemList)) {
+			cartItemList = null;
+		}
+
+		ModelAndView mav = new ModelAndView();
+
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				DataSourceConfig.class)) {
+			ProductServiceImpl productService = context.getBean("productServiceImpl", ProductServiceImpl.class);
+
+			String[] splits1 = productService.splits(cartItemList);
+			ArrayList<String> cartItemList2 = null;
+			if (splits1 != null) {
+				cartItemList2 = new ArrayList<>(Arrays.asList(splits1));
+
+				String proTotal = proName + "/" + proAmount + "/" + proPrice;
+				cartItemList2.add(proTotal);
+				System.out.println(cartItemList);
+
+				String intStr = proPrice.replaceAll("[^0-9]", "");
+				Long proPriceL = Long.parseLong(intStr);
+				int proAmountI = Integer.parseInt(proAmount);
+				Long totalPrice2 = proPriceL * proAmountI;
+
+				session.setAttribute("cartItemList", cartItemList2);
+				session.setAttribute("totalPrice", totalPrice2);
+
+			} else {
+				cartItemList2 = new ArrayList<>();
+
+				String proTotal = proName + "/" + proAmount + "/" + proPrice;
+				cartItemList2.add(proTotal);
+				System.out.println(cartItemList);
+
+				String intStr = proPrice.replaceAll("[^0-9]", "");
+				Long proPriceL = Long.parseLong(intStr);
+				int proAmountI = Integer.parseInt(proAmount);
+				Long totalPriceAll = null;
+
+				if (totalPrice != null) {
+					Long totalPrice1 = Long.parseLong(totalPrice);
+					Long totalPrice2 = proPriceL * proAmountI;
+					totalPriceAll = totalPrice1 + totalPrice2;
+				}
+
+				session.setAttribute("cartItemList", cartItemList2);
+				session.setAttribute("totalPrice", totalPriceAll);
+			}
+
+			mav.setViewName("purchase/purchase_page_result");
+
+		} catch (BeansException e) {
+			System.out.println("midForm 오류났음!!");
 			e.printStackTrace();
 		}
 		return mav;
