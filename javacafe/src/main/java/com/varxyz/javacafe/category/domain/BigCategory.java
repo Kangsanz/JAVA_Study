@@ -8,5 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BigCategory {
+	private int bid;
 	private String bigName;
 }

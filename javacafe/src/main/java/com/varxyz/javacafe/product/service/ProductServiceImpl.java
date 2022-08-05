@@ -55,11 +55,35 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	public String[] splits(String string) {
-		return string.replace("[", "").replace("]", "").replace(" ", "").split(",");
+		if (string == null || string == "" || string == " ") {
+			return null;
+		} else {
+			return string.replace("[", "").replace("]", "").replace(" ", "").split(",");
+		}
 	}
-	
-	public boolean getBoolean() {
-		return true;
+
+	public boolean contain(List<String> cart, String cartName, String carPrice, int cartAmount, String cartNamePrice) {
+		for (int i = 0; i < 10; i++) {
+
+			cartNamePrice = cartName + "/" + carPrice + "/" + (cartAmount + i);
+
+			if (cart.contains(cartNamePrice)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Object contain2(List<String> cart, String cartName, String carPrice, int cartAmount, String cartNamePrice) {
+		for (int i = 0; i < 10; i++) {
+
+			cartNamePrice = cartName + "/" + carPrice + "/" + (cartAmount + i);
+
+			if (cart.contains(cartNamePrice)) {
+				return i;
+			}
+		}
+		return 2;
 	}
 
 }

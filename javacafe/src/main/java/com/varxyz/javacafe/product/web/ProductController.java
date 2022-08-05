@@ -22,13 +22,82 @@ import com.varxyz.javacafe.config.DataSourceConfig;
 import com.varxyz.javacafe.product.domain.Product;
 import com.varxyz.javacafe.product.repository.ProductDao;
 import com.varxyz.javacafe.product.service.ProductServiceImpl;
-import com.varxyz.javacafe.purchase.domain.CartItem;
-import com.varxyz.javacafe.purchase.domain.Item;
-import com.varxyz.javacafe.purchase.repository.PurchaseDao;
-import com.varxyz.javacafe.purchase.service.PurchaseServiceImpl;
 
 @Controller("product.productController")
 public class ProductController {
+
+	@GetMapping("/product/addProduct_page")
+	public ModelAndView addForm(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				DataSourceConfig.class)) {
+			ProductDao dao = context.getBean("productDao", ProductDao.class);
+			CategoryDao cDao = context.getBean("categoryDao", CategoryDao.class);
+			ProductServiceImpl productService = context.getBean("productServiceImpl", ProductServiceImpl.class);
+			CategoryServiceImpl categoryService = context.getBean("categoryServiceImpl", CategoryServiceImpl.class);
+
+			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
+			List<MidCategory> midCategoryList = categoryService.getMidCategoryAll(cDao);
+
+			List<String> bigCategoryListName = bigCategoryList.stream().map(BigCategory::getBigName)
+					.collect(Collectors.toList());
+			List<String> midCategoryListName = midCategoryList.stream().map(MidCategory::getMidName)
+					.collect(Collectors.toList());
+
+			mav.addObject("bigCategoryListName", bigCategoryListName);
+			mav.addObject("midCategoryListName", midCategoryListName);
+
+			mav.setViewName("product/addProduct_page");
+
+		} catch (BeansException e) {
+			System.out.println("loginForm 오류났음!!");
+			e.printStackTrace();
+		}
+		return mav;
+	}
+
+	@PostMapping("/product/addProduct_page")
+	public ModelAndView add(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+
+		String bigCategory = request.getParameter("bigCategory");
+		String midCategory = request.getParameter("midCategory");
+		String proName = request.getParameter("proName");
+		String proPrice = request.getParameter("proPrice");
+		Long proPriceL = Long.parseLong(proPrice);
+		String proImage = request.getParameter("proImage");
+
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				DataSourceConfig.class)) {
+			ProductDao dao = context.getBean("productDao", ProductDao.class);
+			CategoryDao cDao = context.getBean("categoryDao", CategoryDao.class);
+			ProductServiceImpl productService = context.getBean("productServiceImpl", ProductServiceImpl.class);
+			CategoryServiceImpl categoryService = context.getBean("categoryServiceImpl", CategoryServiceImpl.class);
+
+			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
+			List<MidCategory> midCategoryList = categoryService.getMidCategoryAll(cDao);
+
+			List<String> bigCategoryListName = bigCategoryList.stream().map(BigCategory::getBigName)
+					.collect(Collectors.toList());
+			List<String> midCategoryListName = midCategoryList.stream().map(MidCategory::getMidName)
+					.collect(Collectors.toList());
+
+			mav.addObject("bigCategoryListName", bigCategoryListName);
+			mav.addObject("midCategoryListName", midCategoryListName);
+			
+			int mid = categoryService.get
+
+			productService.addProduct(dao, 0, proName, proPriceL, proImage);
+
+			mav.setViewName("product/addProduct_page");
+
+		} catch (BeansException e) {
+			System.out.println("loginForm 오류났음!!");
+			e.printStackTrace();
+		}
+		return mav;
+	}
 
 	@GetMapping("/product/product_page")
 	public ModelAndView loginForm(HttpServletRequest request) {
@@ -49,8 +118,11 @@ public class ProductController {
 			List<String> midCategoryListName = midCategoryList.stream().map(MidCategory::getMidName)
 					.collect(Collectors.toList());
 
+			Long totalPrice = (long) 0;
+
 			mav.addObject("bigCategoryListName", bigCategoryListName);
 			mav.addObject("midCategoryListName", midCategoryListName);
+			mav.addObject("totalPrice", totalPrice);
 			mav.setViewName("product/product_page");
 
 		} catch (BeansException e) {
@@ -65,6 +137,8 @@ public class ProductController {
 		ModelAndView mav = new ModelAndView();
 
 		String bigCategory = request.getParameter("bigCategory");
+		String cartItem = request.getParameter("cart");
+		String totalPrice = request.getParameter("totalPrice");
 
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
@@ -82,7 +156,6 @@ public class ProductController {
 
 			mav.addObject("categoryProducts", categoryProducts);
 			mav.addObject("productsPrice", productsPrice);
-			mav.setViewName("product/product_page");
 
 			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
 			List<MidCategory> midCategoryList = categoryService.getMidCategoryAll(cDao);
@@ -94,6 +167,29 @@ public class ProductController {
 
 			mav.addObject("bigCategoryListName", bigCategoryListName);
 			mav.addObject("midCategoryListName", midCategoryListName);
+
+			// 장바구니 상품 불러오기
+			String[] splits3 = productService.splits(cartItem);
+
+			List<String> cartList = null;
+			if (splits3 != null) {
+				cartList = new ArrayList<>(Arrays.asList(splits3));
+			}
+
+			List<String> cart = new ArrayList<>();
+
+			// 장바구니 상품 리스트 장바구니에 추가
+			if (cartList != null) {
+				for (String item : cartList) {
+					cart.add(item);
+				}
+				// 장바구니 이름과 가격 구별
+				mav.addObject("cart", cart);
+			}
+
+			mav.addObject("totalPrice", totalPrice);
+
+			mav.setViewName("product/product_page");
 
 		} catch (BeansException e) {
 			System.out.println("bigForm 오류났음!!");
@@ -107,6 +203,8 @@ public class ProductController {
 		ModelAndView mav = new ModelAndView();
 
 		String midCategory = request.getParameter("midCategory");
+		String cartItem = request.getParameter("cart");
+		String totalPrice = request.getParameter("totalPrice");
 
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				DataSourceConfig.class)) {
@@ -123,7 +221,6 @@ public class ProductController {
 
 			mav.addObject("categoryProducts", categoryProducts);
 			mav.addObject("productsPrice", productsPrice);
-			mav.setViewName("product/product_page");
 
 			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
 			List<MidCategory> midCategoryList = categoryService.getMidCategoryAll(cDao);
@@ -136,6 +233,30 @@ public class ProductController {
 			mav.addObject("bigCategoryListName", bigCategoryListName);
 			mav.addObject("midCategoryListName", midCategoryListName);
 
+			// 장바구니 상품 불러오기
+			String[] splits3 = productService.splits(cartItem);
+
+			List<String> cartList = null;
+			if (splits3 != null) {
+				cartList = new ArrayList<>(Arrays.asList(splits3));
+			}
+
+			List<String> cart = new ArrayList<>();
+
+			// 장바구니 상품 리스트 장바구니에 추가
+			if (cartList != null) {
+				for (String item : cartList) {
+					cart.add(item);
+
+				}
+				// 장바구니 이름과 가격 구별
+				mav.addObject("cart", cart);
+			}
+
+			mav.addObject("totalPrice", totalPrice);
+
+			mav.setViewName("product/product_page");
+
 		} catch (BeansException e) {
 			System.out.println("midForm 오류났음!!");
 			e.printStackTrace();
@@ -147,8 +268,10 @@ public class ProductController {
 	public ModelAndView login(HttpServletRequest request) {
 		String categoryProducts = request.getParameter("categoryProducts");
 		String productsPrice = request.getParameter("productsPrice");
-		String product = request.getParameter("product");
-		String cartListString = request.getParameter("cartList");
+		String proName = request.getParameter("proName");
+		String proPrice = request.getParameter("proPrice");
+		String cartItem = request.getParameter("cart");
+		String totalPrice = request.getParameter("totalPrice");
 
 		ModelAndView mav = new ModelAndView();
 
@@ -156,10 +279,10 @@ public class ProductController {
 				DataSourceConfig.class)) {
 			ProductDao dao = context.getBean("productDao", ProductDao.class);
 			CategoryDao cDao = context.getBean("categoryDao", CategoryDao.class);
-			PurchaseDao pDao = context.getBean("purchaseDao", PurchaseDao.class);
+//			PurchaseDao pDao = context.getBean("purchaseDao", PurchaseDao.class);
 			ProductServiceImpl productService = context.getBean("productServiceImpl", ProductServiceImpl.class);
 			CategoryServiceImpl categoryService = context.getBean("categoryServiceImpl", CategoryServiceImpl.class);
-			PurchaseServiceImpl purchaseService = context.getBean("purchaseServiceImpl", PurchaseServiceImpl.class);
+//			PurchaseServiceImpl purchaseService = context.getBean("purchaseServiceImpl", PurchaseServiceImpl.class);
 
 			// 카테고리 보이기
 			List<BigCategory> bigCategoryList = categoryService.getBigCategoryAll(cDao);
@@ -174,42 +297,93 @@ public class ProductController {
 			mav.addObject("midCategoryListName", midCategoryListName);
 
 			// 상품 정보 보이기
-
 			String[] splits1 = productService.splits(categoryProducts);
 			String[] splits2 = productService.splits(productsPrice);
-			String[] splits3 = productService.splits(cartListString);
 
 			ArrayList<String> categoryProductsList = new ArrayList<>(Arrays.asList(splits1));
 			ArrayList<String> productsPriceList = new ArrayList<>(Arrays.asList(splits2));
-			ArrayList<String> cartList = new ArrayList<>(Arrays.asList(splits3));
 
 			mav.addObject("categoryProducts", categoryProductsList);
 			mav.addObject("productsPrice", productsPriceList);
 			mav.addObject("bigCategoryListName", bigCategoryListName);
 			mav.addObject("midCategoryListName", midCategoryListName);
 
-			// 장바구니
-			List<String> cart;
-			int allCount;
-			int amount;
+			// 장바구니 상품 불러오기
+			String[] splits3 = productService.splits(cartItem);
 
-			if (cart == null) {
-				cart = new ArrayList<>();
+			System.out.println("splits3 = " + splits3);
+
+			List<String> cartList = null;
+			if (splits3 != null) {
+				cartList = new ArrayList<>(Arrays.asList(splits3));
+			}
+			System.out.println("cartList = " + cartList);
+
+			// 장바구니 null 체크
+			if (cartList == null) {
+				System.out.println("cartList 비었음!");
+				List<String> cart = new ArrayList<>();
+
+				// 장바구니 상품 리스트
+				int allCount;
+				int amount;
+
+				String cartName = proName;
+				String cartPrice = proPrice;
+				String cartAmount = "1";
+				String cartNamePrice = proName + "/" + proPrice + "/" + cartAmount;
+				mav.addObject("cartName", cartName);
+				mav.addObject("cartPrice", cartPrice);
+				mav.addObject("cartAmount", cartAmount);
+
+				// 장바구니 상품 리스트 장바구니에 추가
+				cart.add(cartNamePrice);
+
+				// 장바구니 이름과 가격 구별
+				mav.addObject("cart", cart);
+
+			} else {
+				System.out.println("cartList 안 비었음!");
+				List<String> cart = new ArrayList<>();
+
+				// 장바구니 상품 리스트
+				int allCount;
+				int amount;
+
+				// 기존 상품 장바구니 추가
+				for (String item : cartList) {
+					cart.add(item);
+				}
+
+				// 상품이 기존에 있으면 갯수 상승 및 새로운 상품 리스트 장바구니에 추가
+				String cartName = proName;
+				String cartPrice = proPrice;
+				int cartAmount = 1;
+
+				String cartNamePrice = cartName + "/" + cartPrice + "/" + cartAmount;
+
+				if (productService.contain(cart, cartName, cartPrice, cartAmount, cartNamePrice)) {
+					System.out.println("상품이 존재함");
+					cart.remove(cartNamePrice);
+
+					cart.add(cartNamePrice);
+				} else {
+					System.out.println("상품이 없음");
+					cart.add(cartNamePrice);
+				}
+
+				// 장바구니 이름과 가격 구별
+				mav.addObject("cart", cart);
 			}
 
-			List<CartItem> cartItems;
+			// 총 금액
+			Long totalPriceL = Long.parseLong(totalPrice);
 
-			if (cartItems == null) {
-				cartItems = new ArrayList<>();
-			}
+			String intStr = proPrice.replaceAll("[^\\d]", "");
+			totalPriceL += Long.parseLong(intStr);
 
-			Item item = new Item(product);
+			mav.addObject("totalPrice", totalPriceL);
 
-			cart.add(purchaseService.addCart(cart, cartItems, item, product, amount));
-
-			List<CartItem> cartItemList = purchaseService.
-
-			mav.addObject("cartList", cart);
 			mav.setViewName("product/product_page");
 
 		} catch (BeansException e) {

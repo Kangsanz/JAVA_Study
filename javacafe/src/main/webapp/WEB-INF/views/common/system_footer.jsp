@@ -3,5 +3,7 @@
 </div>
 </main>
 <footer class="pt-3 mt-4 text-muted border-top footer"> &copy; KangsanPark Copyright 2022 </footer>
+<!-- <script src="//code.jquery.com/jquery-3.3.1.min.js"></script> -->
+<%-- <script type="text/javascript" src="<c:url value='/resources/js/default.js'/>"></script> --%>
 </body>
 </html>

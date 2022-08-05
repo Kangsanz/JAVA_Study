@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MidCategory {
+	private int mid;
 	private int midBigCategory;
 	private String midName;
 }

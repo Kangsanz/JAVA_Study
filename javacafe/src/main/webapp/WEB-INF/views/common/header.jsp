@@ -84,12 +84,12 @@
 	<main>
 		<div class="position-relative container py-4">
 			<header class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-4 border-bottom">
-				<a href="#" class="d-flex align-items-center text-dark text-decoration-none">
+				<a href="<c:url value='product_page'/>" class="d-flex align-items-center text-dark text-decoration-none">
 					<span class="fs-3 logo text-center">Java Cafe</span>
 				</a>
 			</header>
 			<div class="position-absolute top-0 end-0" style="transform: translateY(89%);">
-				<a href="<c:url value='#'/>" class="btn btn-outline-primary me-2">
+				<a href="<c:url value='addProduct_page'/>" class="btn btn-outline-primary me-2">
 					<span class="fs-5">관리자</span>
 				</a>
 			</div>
