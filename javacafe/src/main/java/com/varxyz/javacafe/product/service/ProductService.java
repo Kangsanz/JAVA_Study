@@ -2,6 +2,9 @@ package com.varxyz.javacafe.product.service;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+
+import com.varxyz.javacafe.category.domain.MidCategory;
 import com.varxyz.javacafe.product.domain.Product;
 import com.varxyz.javacafe.product.repository.ProductDao;
 

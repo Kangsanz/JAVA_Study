@@ -85,10 +85,11 @@ public class ProductController {
 
 			mav.addObject("bigCategoryListName", bigCategoryListName);
 			mav.addObject("midCategoryListName", midCategoryListName);
-			
-			int mid = categoryService.get
 
-			productService.addProduct(dao, 0, proName, proPriceL, proImage);
+			MidCategory midCategory2 = categoryService.getMidCategoryByMidName(cDao, midCategory);
+			int mid = midCategory2.getMid();
+
+			productService.addProduct(dao, mid, proName, proPriceL, proImage);
 
 			mav.setViewName("product/addProduct_page");
 

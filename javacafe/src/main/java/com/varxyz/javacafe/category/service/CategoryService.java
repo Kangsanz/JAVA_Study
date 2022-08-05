@@ -6,7 +6,6 @@ import com.varxyz.javacafe.category.domain.BigCategory;
 import com.varxyz.javacafe.category.domain.MidCategory;
 import com.varxyz.javacafe.category.repository.CategoryDao;
 
-
 public interface CategoryService {
 	// 큰 카테고리 생성
 	public void addBigCategory(CategoryDao dao, String bigName);
@@ -19,4 +18,7 @@ public interface CategoryService {
 
 	// 큰 카테고리 조회
 	public List<MidCategory> getMidCategoryAll(CategoryDao dao);
+
+	// 작은 카테고리 mid 조회
+	public MidCategory getMidCategoryByMidName(CategoryDao dao, String midName);
 }

@@ -47,4 +47,10 @@ public class CategoryServiceImpl implements CategoryService {
 		System.out.println("-getMidCategoryAll-");
 		return dao.getMidCategoryAll();
 	}
+
+	@Override
+	public MidCategory getMidCategoryByMidName(CategoryDao dao, String midName) {
+		System.out.println("-getMidCategoryByMidName-");
+		return dao.getMidCategoryByMidName();
+	}
 }

@@ -39,11 +39,11 @@ public class CategoryDao {
 		String sql = "SELECT * FROM MidCategory";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<MidCategory>(MidCategory.class));
 	}
-	
+
 	// 작은 카테고리 mid 조회
-	public MidCategory getMid() {
-		String sql = "SELECT * FROM MidCategory WHERE ";
-		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<MidCategory>(MidCategory.class));
+	public MidCategory getMidCategoryByMidName() {
+		String sql = "SELECT * FROM MidCategory WHERE midName";
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<MidCategory>(MidCategory.class));
 	}
-	
+
 }
